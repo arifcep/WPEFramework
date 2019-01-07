@@ -3,6 +3,7 @@
 #include "IComposition.h"
 #include "IDictionary.h"
 #include "IGuide.h"
+#include "IMallocDummy.h"
 #include "INetflix.h"
 #include "IContentDecryption.h"
 #include "INetflix.h"
@@ -316,6 +317,31 @@ namespace ProxyStubs {
         nullptr
     };
     // IWebDriver interface stub definitions
+
+    //
+    // IMallocDummy interface stub definitions (interface/IMallocDummy.h)
+    //
+    ProxyStub::MethodHandler MallocDummyStubMethods[] = {
+        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
+            //
+            // virtual uint64_t Malloc(uint64_t size) = 0;
+            //
+            RPC::Data::Frame::Reader parameters(message->Parameters().Reader());
+            RPC::Data::Frame::Writer response(message->Response().Writer());
+            uint64_t size(parameters.Number<uint64_t>());
+            message->Parameters().Implementation<IStream::IControl>()->Position(size);
+            response.Number<uint64_t>(message->Parameters().Implementation<IStream::IControl>()->Position());
+        },
+        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
+            //
+            // virtual uint64_t GetAllocatedMemory(void) = 0;
+            //
+            RPC::Data::Frame::Writer response(message->Response().Writer());
+            response.Number<uint64_t>(message->Parameters().Implementation<IStream::IControl>()->Position());
+        },
+        nullptr
+    };
+    // IMallocDummy interface stub definitions
 
     //
     // IOCDM interface stub definitions (interface/IOCDM.h)
@@ -1573,6 +1599,7 @@ namespace ProxyStubs {
     typedef ProxyStub::StubType<IGuide, GuideStubMethods, ProxyStub::UnknownStub> IGuideStub;
     typedef ProxyStub::StubType<IGuide::INotification, GuideNotificationStubMethods, ProxyStub::UnknownStub> GuideNotificationStub;
     typedef ProxyStub::StubType<IWebDriver, WebDriverStubMethods, ProxyStub::UnknownStub> WebDriverStub;
+    typedef ProxyStub::StubType<IMallocDummy, MallocDummyStubMethods, ProxyStub::UnknownStub> MallocDummyStub;
     typedef ProxyStub::StubType<IContentDecryption, OpenCDMiStubMethods, ProxyStub::UnknownStub> OpenCDMiStub;
     typedef ProxyStub::StubType<INetflix, NetflixStubMethods, ProxyStub::UnknownStub> NetflixStub;
     typedef ProxyStub::StubType<INetflix::INotification, NetflixNotificationStubMethods, ProxyStub::UnknownStub> NetflixNotificationStub;
@@ -1864,6 +1891,37 @@ namespace ProxyStubs {
             writer.Number<PluginHost::IShell*>(webbridge);
             Invoke(newMessage);
             return (newMessage->Response().Reader().Number<uint32_t>());
+        }
+    };
+
+    class MallocDummyProxy : public ProxyStub::UnknownProxyType<IMallocDummy> {
+    public:
+        MallocDummyProxy(Core::ProxyType<Core::IPCChannel>& channel, void* implementation, const bool otherSideInformed)
+            : BaseClass(channel, implementation, otherSideInformed)
+        {
+        }
+
+        virtual ~MallocDummyProxy()
+        {
+        }
+
+    public:
+        //virtual uint64_t Malloc(uint64_t size) = 0;
+        virtual uint64_t Malloc(uint64_t size)
+        {
+            IPCMessage newMessage(BaseClass::Message(2));
+            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
+            writer.Number<uint64_t>(size);
+            Invoke(newMessage);
+
+            return (newMessage->Response().Reader().Number<uint64_t>());
+        }
+        //virtual uint64_t GetAllocatedMemory(void) = 0;
+        virtual uint64_t GetAllocatedMemory(void)
+        {
+            IPCMessage newMessage(BaseClass::Message(3));
+            Invoke(newMessage);
+            return (newMessage->Response().Reader().Number<uint64_t>());
         }
     };
 
@@ -3064,6 +3122,7 @@ namespace ProxyStubs {
             RPC::Administrator::Instance().Announce<IGuide, IGuideProxy, IGuideStub>();
             RPC::Administrator::Instance().Announce<IGuide::INotification, GuideNotificationProxy, GuideNotificationStub>();
             RPC::Administrator::Instance().Announce<IWebDriver, WebDriverProxy, WebDriverStub>();
+            RPC::Administrator::Instance().Announce<IMallocDummy, MallocDummyProxy, MallocDummyStub>();
             RPC::Administrator::Instance().Announce<IContentDecryption, OpenCDMiProxy, OpenCDMiStub>();
             RPC::Administrator::Instance().Announce<INetflix, NetflixProxy, NetflixStub>();
             RPC::Administrator::Instance().Announce<INetflix::INotification, NetflixNotificationProxy, NetflixNotificationStub>();
