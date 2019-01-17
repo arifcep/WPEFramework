@@ -1,10 +1,8 @@
 #include "IAVNClient.h"
 #include "IBrowser.h"
 #include "IComposition.h"
-#include "ICrashDummy.h"
 #include "IDictionary.h"
 #include "IGuide.h"
-#include "IMallocDummy.h"
 #include "INetflix.h"
 #include "IContentDecryption.h"
 #include "INetflix.h"
@@ -14,7 +12,6 @@
 #include "IRPCLink.h"
 #include "IRtspClient.h"
 #include "IStreaming.h"
-#include "ITestService.h"
 #include "ITVControl.h"
 #include "IWebDriver.h"
 #include "IWebServer.h"
@@ -320,130 +317,6 @@ namespace ProxyStubs {
     };
     // IWebDriver interface stub definitions
 
-    //
-    // IMallocDummy interface stub definitions (interface/IMallocDummy.h)
-    //
-    ProxyStub::MethodHandler MallocDummyStubMethods[] = {
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual uint32_t Malloc(uint32_t size) = 0;
-            //
-            RPC::Data::Frame::Reader parameters(message->Parameters().Reader());
-            uint32_t size(parameters.Number<uint32_t>());
-            uint32_t result = message->Parameters().Implementation<IMallocDummy>()->Malloc(size);
-
-            RPC::Data::Frame::Writer response(message->Response().Writer());
-            response.Number<uint32_t>(result);
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            //  virtual void Free(void) = 0;
-            //
-            message->Parameters().Implementation<IMallocDummy>()->Free();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            //  virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident) = 0;
-            //
-            RPC::Data::Frame::Writer response(message->Response().Writer());
-            uint32_t allocated = 0; /* If it would be in->out, you need to read them from the package and fill */
-            uint32_t size = 0;   /* them in here, but these are just out values. */
-            uint32_t resident = 0;
-            message->Parameters().Implementation<IMallocDummy>()->Statm(allocated, size, resident);
-            response.Number<uint32_t>(allocated);
-            response.Number<uint32_t>(size);
-            response.Number<uint32_t>(resident);
-        },
-        nullptr
-    };
-    // IMallocDummy interface stub definitions
-
-    //
-    // ITestService interface stub definitions (interface/ITestService.h)
-    //
-    ProxyStub::MethodHandler TestServiceStubMethods[] = {
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual uint32_t Malloc(uint32_t size) = 0;
-            //
-            RPC::Data::Frame::Reader parameters(message->Parameters().Reader());
-            uint32_t size(parameters.Number<uint32_t>());
-            uint32_t result = message->Parameters().Implementation<ITestService>()->Malloc(size);
-
-            RPC::Data::Frame::Writer response(message->Response().Writer());
-            response.Number<uint32_t>(result);
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            //  virtual void Free(void) = 0;
-            //
-            message->Parameters().Implementation<ITestService>()->Free();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            //  virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident) = 0;
-            //
-            RPC::Data::Frame::Writer response(message->Response().Writer());
-            uint32_t allocated = 0; /* If it would be in->out, you need to read them from the package and fill */
-            uint32_t size = 0;   /* them in here, but these are just out values. */
-            uint32_t resident = 0;
-            message->Parameters().Implementation<ITestService>()->Statm(allocated, size, resident);
-            response.Number<uint32_t>(allocated);
-            response.Number<uint32_t>(size);
-            response.Number<uint32_t>(resident);
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual bool Configure(PluginHost::IShell *shell) = 0;
-            RPC::Data::Frame::Reader reader(message->Parameters().Reader());
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-
-            PluginHost::IShell* implementation = reader.Number<PluginHost::IShell*>();
-            PluginHost::IShell* proxy = RPC::Administrator::Instance().CreateProxy<PluginHost::IShell>(channel, implementation, true, false);
-
-            ASSERT((proxy != nullptr) && "Failed to create proxy");
-            if (proxy == nullptr) {
-                TRACE_L1(_T("Could not create a stub for ICrashDummy: %p"), implementation);
-                writer.Number<bool>(false);
-            }
-            else {
-                writer.Number(message->Parameters().Implementation<ITestService>()->Configure(proxy));
-                if (proxy->Release() != Core::ERROR_NONE) {
-                    TRACE_L1("Oops seems like we did not maintain a reference to this sink. %d", __LINE__);
-                }
-            }
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual void Crash() = 0;
-            //
-            message->Parameters().Implementation<ITestService>()->Crash();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual bool CrashNTimes(uint8_t n) = 0;
-            //
-            RPC::Data::Frame::Reader parameters(message->Parameters().Reader());
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-
-            uint8_t n(parameters.Number<uint8_t>());
-            writer.Number(message->Parameters().Implementation<ITestService>()->CrashNTimes(n));
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual void ExecPendingCrash() = 0;
-            //
-            message->Parameters().Implementation<ITestService>()->ExecPendingCrash();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            //
-            // virtual uint8_t PendingCrashCount() = 0;
-            //
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-            writer.Number(message->Parameters().Implementation<ITestService>()->PendingCrashCount());
-        },
-        nullptr
-    };
-    // ITestService interface stub definitions
 
     //
     // IOCDM interface stub definitions (interface/IOCDM.h)
@@ -1694,54 +1567,6 @@ namespace ProxyStubs {
         nullptr
     };
 
-    //
-    // ICrashDummy interface stub definitions (interface/ICrashDummy.h)
-    //
-    ProxyStub::MethodHandler CrashDummyStubMethods[] = {
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual bool Configure(PluginHost::IShell *shell) = 0;
-            RPC::Data::Frame::Reader reader(message->Parameters().Reader());
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-
-            PluginHost::IShell* implementation = reader.Number<PluginHost::IShell*>();
-            PluginHost::IShell* proxy = RPC::Administrator::Instance().CreateProxy<PluginHost::IShell>(channel, implementation, true, false);
-
-            ASSERT((proxy != nullptr) && "Failed to create proxy");
-            if (proxy == nullptr) {
-                TRACE_L1(_T("Could not create a stub for ICrashDummy: %p"), implementation);
-                writer.Number<bool>(false);
-            }
-            else {
-                writer.Number(message->Parameters().Implementation<ICrashDummy>()->Configure(proxy));
-                if (proxy->Release() != Core::ERROR_NONE) {
-                    TRACE_L1("Oops seems like we did not maintain a reference to this sink. %d", __LINE__);
-                }
-            }
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual void Crash() = 0;
-            message->Parameters().Implementation<ICrashDummy>()->Crash();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual bool CrashNTimes(uint8_t n) = 0;
-            RPC::Data::Frame::Reader parameters(message->Parameters().Reader());
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-
-            uint8_t n(parameters.Number<uint8_t>());
-            writer.Number(message->Parameters().Implementation<ICrashDummy>()->CrashNTimes(n));
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual void ExecPendingCrash() = 0;
-            message->Parameters().Implementation<ICrashDummy>()->ExecPendingCrash();
-        },
-        [](Core::ProxyType<Core::IPCChannel>& channel VARIABLE_IS_NOT_USED, Core::ProxyType<RPC::InvokeMessage>& message) {
-            // virtual uint8_t PendingCrashCount() = 0;
-            RPC::Data::Frame::Writer writer(message->Response().Writer());
-            writer.Number(message->Parameters().Implementation<ICrashDummy>()->PendingCrashCount());
-        },
-        nullptr
-    };
-
     // IRPCLink::INotification interface stub definitions
 
     typedef ProxyStub::StubType<IBrowser, BrowserStubMethods, ProxyStub::UnknownStub> BrowserStub;
@@ -1749,7 +1574,6 @@ namespace ProxyStubs {
     typedef ProxyStub::StubType<IGuide, GuideStubMethods, ProxyStub::UnknownStub> IGuideStub;
     typedef ProxyStub::StubType<IGuide::INotification, GuideNotificationStubMethods, ProxyStub::UnknownStub> GuideNotificationStub;
     typedef ProxyStub::StubType<IWebDriver, WebDriverStubMethods, ProxyStub::UnknownStub> WebDriverStub;
-    typedef ProxyStub::StubType<IMallocDummy, MallocDummyStubMethods, ProxyStub::UnknownStub> MallocDummyStub;
     typedef ProxyStub::StubType<IContentDecryption, OpenCDMiStubMethods, ProxyStub::UnknownStub> OpenCDMiStub;
     typedef ProxyStub::StubType<INetflix, NetflixStubMethods, ProxyStub::UnknownStub> NetflixStub;
     typedef ProxyStub::StubType<INetflix::INotification, NetflixNotificationStubMethods, ProxyStub::UnknownStub> NetflixNotificationStub;
@@ -1774,8 +1598,6 @@ namespace ProxyStubs {
     typedef ProxyStub::StubType<IRtspClient, RtspClientStubMethods, ProxyStub::UnknownStub> RtspClientStub;
     typedef ProxyStub::StubType<IPower, PowerStubMethods, ProxyStub::UnknownStub> PowerStub;
     typedef ProxyStub::StubType<IPower::INotification, PowerNotificationStubMethods, ProxyStub::UnknownStub> PowerNotificationStub;
-    typedef ProxyStub::StubType<ICrashDummy, CrashDummyStubMethods, ProxyStub::UnknownStub> CrashDummyStub;
-    typedef ProxyStub::StubType<ITestService, TestServiceStubMethods, ProxyStub::UnknownStub> TestServiceStub;
 
     // -------------------------------------------------------------------------------------------
     // PROXY
@@ -2043,134 +1865,6 @@ namespace ProxyStubs {
             writer.Number<PluginHost::IShell*>(webbridge);
             Invoke(newMessage);
             return (newMessage->Response().Reader().Number<uint32_t>());
-        }
-    };
-
-    class MallocDummyProxy : public ProxyStub::UnknownProxyType<IMallocDummy> {
-    public:
-        MallocDummyProxy(Core::ProxyType<Core::IPCChannel>& channel, void* implementation, const bool otherSideInformed)
-            : BaseClass(channel, implementation, otherSideInformed)
-        {
-        }
-
-        virtual ~MallocDummyProxy()
-        {
-        }
-
-    public:
-        //virtual uint32_t Malloc(uint32_t size) = 0;
-        virtual uint32_t Malloc(uint32_t size)
-        {
-            IPCMessage newMessage(BaseClass::Message(0));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<uint32_t>(size);
-            Invoke(newMessage);
-
-            return (newMessage->Response().Reader().Number<uint32_t>());
-        }
-
-        //virtual void Free(void) = 0;
-        virtual void Free(void)
-        {
-            IPCMessage newMessage(BaseClass::Message(1));
-            Invoke(newMessage);
-        }
-
-        //virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident) = 0;
-        virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident)
-        {
-            IPCMessage newMessage(BaseClass::Message(2));
-            Invoke(newMessage);
-            RPC::Data::Frame::Reader response(newMessage->Response().Reader());
-            allocated = response.Number<uint32_t>();
-            size = response.Number<uint32_t>();
-            resident = response.Number<uint32_t>();
-        }
-    };
-
-    class TestServiceProxy : public ProxyStub::UnknownProxyType<ITestService> {
-    public:
-        TestServiceProxy(Core::ProxyType<Core::IPCChannel>& channel, void* implementation, const bool otherSideInformed)
-            : BaseClass(channel, implementation, otherSideInformed)
-        {
-        }
-
-        virtual ~TestServiceProxy()
-        {
-        }
-
-    public:
-        /* Stub order:
-         * virtual uint32_t Malloc(uint32_t size) = 0
-         * virtual void Free(void) = 0
-         * virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident) = 0
-         * virtual bool Configure(PluginHost::IShell* service) = 0;
-         * virtual void Crash() = 0;
-         * virtual bool CrashNTimes(uint8_t n) = 0;
-         * virtual void ExecPendingCrash() = 0;
-         * virtual uint8_t PendingCrashCount() = 0;
-         */
-
-        virtual uint32_t Malloc(uint32_t size)
-        {
-            IPCMessage newMessage(BaseClass::Message(0));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<uint32_t>(size);
-            Invoke(newMessage);
-
-            return (newMessage->Response().Reader().Number<uint32_t>());
-        }
-
-        virtual void Free(void)
-        {
-            IPCMessage newMessage(BaseClass::Message(1));
-            Invoke(newMessage);
-        }
-
-        virtual void Statm(uint32_t &allocated, uint32_t &size, uint32_t &resident)
-        {
-            IPCMessage newMessage(BaseClass::Message(2));
-            Invoke(newMessage);
-            RPC::Data::Frame::Reader response(newMessage->Response().Reader());
-            allocated = response.Number<uint32_t>();
-            size = response.Number<uint32_t>();
-            resident = response.Number<uint32_t>();
-        }
-
-        virtual bool Configure(PluginHost::IShell* service)
-        {
-            IPCMessage newMessage(BaseClass::Message(3));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<PluginHost::IShell*>(service);
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<bool>());
-        }
-
-        virtual void Crash()
-        {
-            IPCMessage newMessage(BaseClass::Message(4));
-            Invoke(newMessage);
-        }
-
-        virtual bool CrashNTimes(uint8_t n)
-        {
-            IPCMessage newMessage(BaseClass::Message(5));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<uint8_t>(n);
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<bool>());
-        }
-
-        virtual void ExecPendingCrash() {
-            IPCMessage newMessage(BaseClass::Message(6));
-            Invoke(newMessage);
-        }
-
-        virtual uint8_t PendingCrashCount()
-        {
-            IPCMessage newMessage(BaseClass::Message(7));
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<uint8_t>());
         }
     };
 
@@ -3360,60 +3054,6 @@ namespace ProxyStubs {
         }
     };
 
-    class CrashDummyProxy : public ProxyStub::UnknownProxyType<ICrashDummy> {
-    public:
-        CrashDummyProxy(Core::ProxyType<Core::IPCChannel>& channel, void* implementation, const bool otherSideInformed)
-            : BaseClass(channel, implementation, otherSideInformed)
-        {
-        }
-
-        virtual ~CrashDummyProxy() {}
-
-    public:
-        /* Stub order:
-         * virtual bool Configure(PluginHost::IShell* service) = 0;
-         * virtual void Crash() = 0;
-         * virtual bool CrashNTimes(uint8_t n) = 0;
-         * virtual void ExecPendingCrash() = 0;
-         * virtual uint8_t PendingCrashCount() = 0;
-         */
-        virtual bool Configure(PluginHost::IShell* service)
-        {
-            IPCMessage newMessage(BaseClass::Message(0));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<PluginHost::IShell*>(service);
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<bool>());
-        }
-
-        virtual void Crash()
-        {
-            IPCMessage newMessage(BaseClass::Message(1));
-            Invoke(newMessage);
-        }
-
-        virtual bool CrashNTimes(uint8_t n)
-        {
-            IPCMessage newMessage(BaseClass::Message(2));
-            RPC::Data::Frame::Writer writer(newMessage->Parameters().Writer());
-            writer.Number<uint8_t>(n);
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<bool>());
-        }
-
-        virtual void ExecPendingCrash() {
-            IPCMessage newMessage(BaseClass::Message(3));
-            Invoke(newMessage);
-        }
-
-        virtual uint8_t PendingCrashCount()
-        {
-            IPCMessage newMessage(BaseClass::Message(4));
-            Invoke(newMessage);
-            return (newMessage->Response().Reader().Number<uint8_t>());
-        }
-    };
-
     // -------------------------------------------------------------------------------------------
     // Registration
     // -------------------------------------------------------------------------------------------
@@ -3426,7 +3066,6 @@ namespace ProxyStubs {
             RPC::Administrator::Instance().Announce<IGuide, IGuideProxy, IGuideStub>();
             RPC::Administrator::Instance().Announce<IGuide::INotification, GuideNotificationProxy, GuideNotificationStub>();
             RPC::Administrator::Instance().Announce<IWebDriver, WebDriverProxy, WebDriverStub>();
-            RPC::Administrator::Instance().Announce<IMallocDummy, MallocDummyProxy, MallocDummyStub>();
             RPC::Administrator::Instance().Announce<IContentDecryption, OpenCDMiProxy, OpenCDMiStub>();
             RPC::Administrator::Instance().Announce<INetflix, NetflixProxy, NetflixStub>();
             RPC::Administrator::Instance().Announce<INetflix::INotification, NetflixNotificationProxy, NetflixNotificationStub>();
@@ -3451,8 +3090,6 @@ namespace ProxyStubs {
             RPC::Administrator::Instance().Announce<IPower, PowerProxy, PowerStub>();
             RPC::Administrator::Instance().Announce<IPower::INotification, PowerNotificationProxy, PowerNotificationStub>();
             RPC::Administrator::Instance().Announce<IRtspClient, RtspClientProxy, RtspClientStub>();
-            RPC::Administrator::Instance().Announce<ICrashDummy, CrashDummyProxy, CrashDummyStub>();
-            RPC::Administrator::Instance().Announce<ITestService, TestServiceProxy, TestServiceStub>();
         }
 
         ~Instantiation()
