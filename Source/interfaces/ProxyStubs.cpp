@@ -1621,7 +1621,7 @@ namespace ProxyStubs {
     typedef ProxyStub::StubType<IRtspClient, RtspClientStubMethods, ProxyStub::UnknownStub> RtspClientStub;
     typedef ProxyStub::StubType<IPower, PowerStubMethods, ProxyStub::UnknownStub> PowerStub;
     typedef ProxyStub::StubType<IPower::INotification, PowerNotificationStubMethods, ProxyStub::UnknownStub> PowerNotificationStub;
-    typedef ProxyStub::StubType<IPower::INotification, TestControllerStubMethods, ProxyStub::UnknownStub> TestControllerStub;
+    typedef ProxyStub::StubType<ITestController, TestControllerStubMethods, ProxyStub::UnknownStub> TestControllerStub;
 
     // -------------------------------------------------------------------------------------------
     // PROXY
