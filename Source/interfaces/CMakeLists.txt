@@ -38,6 +38,7 @@ set(PUBLIC_HEADERS
         IWebDriver.h
         IWebServer.h
         ITestController.h
+        ITestUtility.h
         Module.h
         )
 
