@@ -2,6 +2,7 @@
 # ${TARGET} mentioned here is the name to be used by other CMake projects.
 add_library(Marshalling SHARED
         ProxyStubs.cpp
+        ProxyStubs_TestUtility.cpp
         )
 
 add_library(Interfaces SHARED
@@ -37,7 +38,6 @@ set(PUBLIC_HEADERS
         IRtspClient.h
         IWebDriver.h
         IWebServer.h
-        ITestController.h
         ITestUtility.h
         Module.h
         )

@@ -20,15 +20,14 @@ struct ITestUtility : virtual public Core::IUnknown {
             virtual bool IsValid() const = 0;
             virtual bool Next() = 0;
 
-            // Signal changes on the subscribed namespace..
             virtual ICommand* Command() const = 0;
         };
 
         virtual string Execute(const string& params) = 0;
 
-        virtual const string& Description() const = 0;
-        virtual const string& Signature() const = 0;
-        virtual const string& Name() const = 0;
+        virtual string Description() const = 0;
+        virtual string Signature() const = 0;
+        virtual string Name() const = 0;
 
     };
 
