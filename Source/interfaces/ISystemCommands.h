@@ -15,11 +15,12 @@ namespace Exchange {
             enum { ID = 0x00000081 };
 
             struct IParamsIterator : virtual public Core::IUnknown {
-                enum { ID = 0x00000080 };
+                enum { ID = 0x00000082 };
+
                 virtual ~IParamsIterator() {}
                 virtual string Name() const = 0;
                 virtual string Value() const = 0;
-                virtual bool Next();
+                virtual bool Next() = 0;
             };
 
             virtual ~ICommand() {}
@@ -32,7 +33,7 @@ namespace Exchange {
 
         virtual uint32_t Execute(const CommandId& id, ICommand::IParamsIterator* params) = 0;
         virtual RPC::IStringIterator* SupportedCommands() const = 0;
-        virtual ICommand* Command(const CommandId& id) const;
+        virtual ICommand* Command(const CommandId& id) const = 0;
     };
 
 }  // namespace Exchange
